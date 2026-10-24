@@ -5,7 +5,9 @@ import { records } from './records.js'
 import { coverSVG } from './covers.js'
 import { vinyls, vinylHTML } from './vinyls.js'
 
-export function initCrate(lenis) {
+export function initCrate(lenis, onSelect) {
+  const paused = () => document.body.classList.contains('detail-open')
+  const canHover = matchMedia('(hover: hover)').matches
   const track = document.querySelector('#track')
   const idxEl = document.querySelector('#crateIdx')
 
@@ -28,7 +30,7 @@ export function initCrate(lenis) {
 
   const measure = () => {
     size = cards[0].offsetWidth
-    slot = size * 1.5 // room for the vinyl to slide out
+    slot = size * 1.86 // vinyl slides out ~0.54 of a sleeve; keep clear air before the next one
     total = slot * cards.length
   }
   measure()
@@ -53,14 +55,16 @@ export function initCrate(lenis) {
 
   // Wheel: horizontal always; vertical only once the page has hit bottom
   addEventListener('wheel', (e) => {
+    if (paused()) return
     const atBottom = lenis.scroll >= lenis.limit - 2
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) target += e.deltaX * 1.2
     else if (atBottom && e.deltaY > 0) target += e.deltaY * 1.4
   }, { passive: true })
 
-  // Drag (mouse + touch). A tiny movement counts as a tap → toggle the record open.
+  // Drag (mouse + touch). A tiny movement counts as a click: open the record page.
+  // On touch the first tap pulls the vinyl out, the second opens the page.
   let down = null
-  track.addEventListener('pointerdown', (e) => { down = { x: e.clientX, t: target, moved: false } })
+  track.addEventListener('pointerdown', (e) => { if (paused()) return; down = { x: e.clientX, t: target, moved: false } })
   addEventListener('pointermove', (e) => {
     if (!down) return
     const dx = e.clientX - down.x
@@ -70,12 +74,15 @@ export function initCrate(lenis) {
   addEventListener('pointerup', (e) => {
     if (down && !down.moved) {
       const card = e.target.closest('.card')
-      if (card) { const open = card.classList.contains('is-open'); cards.forEach((c) => c.classList.remove('is-open')); card.classList.toggle('is-open', !open) }
+      if (card && (canHover || card.classList.contains('is-open'))) onSelect(+card.dataset.i, card)
+      else if (card) { cards.forEach((c) => c.classList.remove('is-open')); card.classList.add('is-open') }
     }
     down = null; track.classList.remove('is-dragging')
   })
 
   addEventListener('keydown', (e) => {
+    if (paused()) return
+    if (e.key === 'Enter' && e.target.closest?.('.card')) onSelect(+e.target.dataset.i, e.target)
     if (e.key === 'ArrowRight') target += slot
     if (e.key === 'ArrowLeft') target -= slot
   })

@@ -4,6 +4,7 @@ import Lenis from 'lenis'
 import { records } from './records.js'
 import { coverSVG } from './covers.js'
 import { initCrate } from './carousel.js'
+import { initDetail } from './detail.js'
 
 gsap.registerPlugin(ScrollTrigger)
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -50,7 +51,8 @@ const photos = [...document.querySelectorAll('.photo')].map((el) => new Promise(
 // ---------- Covers: loader flick ----------
 const flick = $('#flick')
 records.forEach((_, i) => flick.insertAdjacentHTML('beforeend', `<div>${coverSVG(i)}</div>`))
-initCrate(lenis)
+const detail = initDetail(lenis)
+initCrate(lenis, detail.open)
 
 // ---------- Loader ----------
 function runLoader() {
@@ -72,7 +74,7 @@ function runLoader() {
   tl.to('.hero__stage', { clipPath: 'inset(0px 0px)', duration: reduced ? 0 : 1.4, ease: 'expo.inOut' }, '<0.1')
   tl.from('.scene', { scale: 1.25, duration: 1.8, ease: 'expo.out' }, '<0.2')
   tl.from('.hero__kanji', { autoAlpha: 0, yPercent: 8, duration: 1.2, ease: 'expo.out' }, '<0.6')
-  tl.add(() => { document.body.classList.remove('is-loading'); $('.loader').remove(); lenis.start(); ScrollTrigger.refresh() })
+  tl.add(() => { document.body.classList.remove('is-loading'); $('.loader').remove(); lenis.start(); ScrollTrigger.refresh(); detail.openFromHash() })
 }
 
 // ---------- Hero: scroll-scrubbed dawn ----------

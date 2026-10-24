@@ -8,7 +8,8 @@ Brandon Yasin's structure (loader, a clean grid, tiny type) combined with Corn R
 - **Loader:** a small square flicks through the 7 covers while a counter runs 0→100. The square then grows into the hero.
 - **Hero:** Mount Fuji at night. Scrolling brings dawn, and the rising sun turns out to be a red vinyl record (the hinomaru is a record). The fog parts. The scroll is short: 2 screens max, with visible progress.
 - **Crate:** 7 sleeves stacked, which fan out into a grid (FLIP).
-- **Record page:** the sleeve moves to the center, the vinyl slides out and spins. *(later)*
+- **Crate:** wider spacing (1.86× a sleeve) so a pulled-out vinyl never touches the next album.
+- **Record page:** the screen floods with the record's color from the click point, the sleeve flies in from the crate (FLIP), the vinyl slides out and spins, and the details reveal line by line. It shows a tracklist, pressing specs and a live "copies left" bar (06 is sold out). It's not sold online, so you visit the basement. Prev/next and arrow keys move between records, Esc closes, and `#/record/04` deep-links to a record.
 
 ## Color tokens
 | Token | Hex | Use |
