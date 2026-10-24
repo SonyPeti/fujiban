@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FUJIBAN 富士盤 — Seven Records</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Shippori+Mincho+B1:wght@800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body class="is-loading">
+  <!-- Corner UI (Brandon-style) -->
+  <header class="ui">
+    <a class="ui__logo roll" href="/"><span data-text="FUJIBAN">FUJIBAN</span><span data-text="富士盤">富士盤</span></a>
+    <nav class="ui__nav"><a class="roll" href="#crate"><span data-text="RECORDS">RECORDS</span></a><a class="roll" href="#"><span data-text="VISIT">VISIT</span></a></nav>
+    <div class="ui__clock">TOKYO <span id="clock" class="tnum">--.--</span></div>
+  </header>
+
+  <!-- Loader -->
+  <div class="loader" aria-hidden="true">
+    <div class="loader__square" id="flick"></div>
+    <div class="loader__count tnum"><span id="count">000</span></div>
+    <div class="loader__note">SEVEN RECORDS · 300 COPIES EACH · NEVER REPRESSED</div>
+  </div>
+
+  <main>
+    <!-- Hero: scroll-scrubbed Fuji dawn (Corn-style) -->
+    <section class="hero" id="hero">
+      <div class="hero__stage">
+        <svg class="scene" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="skyNight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#04060D"/><stop offset="1" stop-color="#1A2342"/></linearGradient>
+            <linearGradient id="skyDawn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9B8C9"/><stop offset=".65" stop-color="#E9D3C3"/><stop offset="1" stop-color="#ECE8DF"/></linearGradient>
+            <radialGradient id="glow"><stop offset="0" stop-color="#FF6A3D" stop-opacity=".55"/><stop offset="1" stop-color="#FF6A3D" stop-opacity="0"/></radialGradient>
+            <radialGradient id="fogG"><stop offset="0" stop-color="#F4F1EA" stop-opacity=".9"/><stop offset="1" stop-color="#F4F1EA" stop-opacity="0"/></radialGradient>
+            <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+            <path id="labelPath" d="M800 0 m-78 0 a78 78 0 1 1 156 0 a78 78 0 1 1 -156 0" />
+          </defs>
+
+          <rect width="1600" height="1000" fill="url(#skyNight)"/>
+          <rect class="sky-dawn" width="1600" height="1000" fill="url(#skyDawn)" opacity="0"/>
+          <g class="stars" id="stars"></g>
+
+          <!-- The sun that is a record -->
+          <g class="sun" transform="translate(0 860)">
+            <circle class="sun__glow" cx="800" cy="0" r="420" fill="url(#glow)"/>
+            <g class="vinyl">
+              <circle class="vinyl__disc" cx="800" cy="0" r="300" fill="#0E0E10"/>
+              <g class="vinyl__grooves" id="grooves"></g>
+              <g class="vinyl__spin">
+                <path d="M800 0 L1100 -40 A300 300 0 0 1 1085 95 Z" fill="url(#sheen)"/>
+                <path d="M800 0 L500 40 A300 300 0 0 1 515 -95 Z" fill="url(#sheen)"/>
+              </g>
+            </g>
+            <circle class="sun__disc" cx="800" cy="0" r="110" fill="#D2231C"/>
+            <g class="vinyl__label">
+              <text font-family="Inter Tight" font-size="13" font-weight="500" letter-spacing="3" fill="#ECE8DF"><textPath href="#labelPath">FUJIBAN 富士盤 · SEVEN RECORDS · 300 COPIES · TOKYO ·</textPath></text>
+              <circle cx="800" cy="0" r="6" fill="#ECE8DF"/>
+            </g>
+          </g>
+
+          <!-- Fuji -->
+          <path class="fuji" d="M120 1000 C430 860 610 650 712 528 L756 516 L788 530 L820 512 L886 526 C990 650 1170 860 1480 1000 Z" fill="#0F1428"/>
+          <path class="fuji-snow" d="M712 528 L756 516 L788 530 L820 512 L886 526 C904 548 922 572 940 598 L918 588 L904 618 L880 596 L860 640 L840 604 L816 650 L796 608 L776 638 L756 600 L736 626 L720 596 L690 612 C698 580 705 552 712 528 Z" fill="#3A4466"/>
+          <!-- Photo layers (ChatGPT, see PROMPTS.md) replace the vectors when present -->
+          <image class="photo" data-src="/scene/fuji.png" data-replaces=".fuji, .fuji-snow" x="-200" y="17" width="2000" height="1333" preserveAspectRatio="xMidYMax meet" style="display:none"/>
+          <path class="ridge" d="M0 1000 L0 900 C200 870 380 905 560 930 C760 955 980 920 1180 895 C1360 875 1500 895 1600 905 L1600 1000 Z" fill="#070A14"/>
+          <image class="photo" data-src="/scene/foreground.png" data-replaces=".ridge" x="0" y="70" width="1600" height="1067" preserveAspectRatio="xMidYMax meet" style="display:none"/>
+          <image class="photo photo--mist" data-src="/scene/mist.png" x="0" y="160" width="1600" height="1067" preserveAspectRatio="xMidYMax meet" style="display:none"/>
+
+          <!-- Fog -->
+          <g class="fog fog--l"><ellipse cx="520" cy="830" rx="640" ry="110" fill="url(#fogG)"/><ellipse cx="300" cy="700" rx="420" ry="70" fill="url(#fogG)" opacity=".7"/></g>
+          <g class="fog fog--r"><ellipse cx="1100" cy="800" rx="640" ry="120" fill="url(#fogG)"/><ellipse cx="1300" cy="680" rx="420" ry="70" fill="url(#fogG)" opacity=".7"/></g>
+        </svg>
+
+        <h1 class="hero__kanji" aria-label="Fujiban">富士盤</h1>
+        <div class="hero__copy">
+          <p class="mask"><span>Seven records.</span></p>
+          <p class="mask"><span>Three hundred copies each.</span></p>
+          <p class="mask"><span>Never repressed.</span></p>
+        </div>
+        <div class="hero__progress"><span class="tnum" id="dawn">05.12</span> DAWN OVER FUJI <i><b id="bar"></b></i></div>
+      </div>
+    </section>
+
+    <!-- Crate: infinite horizontal row (Brandon-style) -->
+    <section class="crate" id="crate" aria-label="The seven records">
+      <div class="crate__top">
+        <span>THE SEVEN</span>
+        <span class="tnum"><b id="crateIdx">01</b> / 07</span>
+        <span class="crate__hint">SCROLL OR DRAG · HOVER TO PULL THE RECORD</span>
+      </div>
+      <div class="crate__track" id="track"></div>
+    </section>
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
