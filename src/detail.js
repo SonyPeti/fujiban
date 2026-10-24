@@ -14,6 +14,8 @@ export function initDetail(lenis) {
   const info = el.querySelector('.detail__info')
   const kanji = el.querySelector('.detail__kanji')
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+  // Where the vinyl goes when it comes out: sideways on desktop, up out of the sleeve on narrow screens
+  const OUT = () => (innerWidth < 900 ? { xPercent: 0, yPercent: -42 } : { xPercent: 56, yPercent: 0 })
 
   let current = -1, openedFrom = null, tl = null, busy = false, lastFocus = null
 
@@ -46,11 +48,13 @@ export function initDetail(lenis) {
   // Reveal everything except the sleeve flight; shared by open and prev/next
   const intro = (t, at) => {
     t.set(vinyl, { autoAlpha: 1 }, at)
-      .fromTo(vinyl, { xPercent: 0, rotation: -40 }, { xPercent: 56, rotation: 0, duration: 1.3, ease: 'expo.out' }, at)
+      .fromTo(vinyl, { xPercent: 0, yPercent: 0, rotation: -40 }, { ...OUT(), rotation: 0, duration: 1.3, ease: 'expo.out' }, at)
       .add(() => el.classList.add('is-spinning'), at + 0.3)
       .fromTo(kanji.children, { yPercent: 110, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, stagger: 0.08, duration: 1, ease: 'expo.out' }, at + 0.1)
-      .fromTo(info.querySelectorAll('.reveal > *'), { yPercent: 110 }, { yPercent: 0, stagger: 0.035, duration: 0.9, ease: 'expo.out' }, at + 0.15)
-      .fromTo('.detail__nav', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, at + 0.5)
+      // Big title slides out of its mask; small mono lines fade + drift (a mask half-cuts small letters mid-way)
+      .fromTo(info.querySelector('.di__title > span'), { yPercent: 110 }, { yPercent: 0, duration: 1, ease: 'expo.out' }, at + 0.1)
+      .fromTo(info.querySelectorAll('.reveal:not(.di__title) > *'), { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.7, ease: 'power3.out' }, at + 0.25)
+      .from(info.querySelector('.di__bar i'), { scaleX: 0, duration: 1.2, ease: 'expo.out' }, at + 0.8)
     return t
   }
 
@@ -60,6 +64,7 @@ export function initDetail(lenis) {
     lastFocus = document.activeElement
     render(i)
     el.hidden = false
+    el.scrollTop = 0
     document.body.classList.add('detail-open')
     lenis.stop()
     history.replaceState(null, '', `#/record/${records[i].no}`)
@@ -82,6 +87,7 @@ export function initDetail(lenis) {
       tl.fromTo(sleeve, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 1, ease: 'expo.out' }, 0.3)
     }
     intro(tl, from ? 1.05 : 0.75) // vinyl comes out as the sleeve settles
+    tl.fromTo('.detail__nav', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, from ? 1.55 : 1.25) // only on open, so prev/next don't blink it
     tl.add(() => gsap.set(bg, { clipPath: 'none' })) // survive window resizes while open; reverse re-renders the circle
     if (reduced) tl.progress(1)
   }
@@ -111,18 +117,23 @@ export function initDetail(lenis) {
     const next = (current + dir + records.length) % records.length
     el.classList.remove('is-spinning')
     if (openedFrom) { gsap.set(openedFrom.cardSleeve, { autoAlpha: 1 }); openedFrom = null }
+    // Out: vinyl tucks into its sleeve, then sleeve + vinyl leave as one object
+    // while the words slide up out of their masks and the color shifts.
     gsap.timeline({ onComplete: () => {
       render(next)
       history.replaceState(null, '', `#/record/${records[next].no}`)
+      gsap.set(vinyl, { xPercent: 0, yPercent: 0, rotation: -40 }) // new vinyl starts tucked inside
+      // In: the new record arrives as one object; its vinyl comes out once it has landed
       const t = gsap.timeline({ onComplete: () => (busy = false) })
-      t.fromTo(sleeve, { xPercent: 30 * dir, autoAlpha: 0 }, { xPercent: 0, autoAlpha: 1, duration: 1, ease: 'expo.out' }, 0.1)
-      intro(t, 0.35)
+      t.fromTo(obj, { xPercent: 24 * dir, autoAlpha: 0 }, { xPercent: 0, autoAlpha: 1, duration: 0.9, ease: 'expo.out' }, 0)
+      intro(t, 0.4)
     } })
-      .to(vinyl, { xPercent: 0, rotation: -40, duration: 0.5, ease: 'power3.in' }, 0)
-      .to([info, kanji], { autoAlpha: 0, duration: 0.35 }, 0)
-      .to(bg, { backgroundColor: records[next].color, duration: 0.6, ease: 'power2.inOut' }, 0)
-      .to(sleeve, { xPercent: -30 * dir, autoAlpha: 0, duration: 0.45, ease: 'power3.in' }, 0.15)
-      .set([info, kanji], { autoAlpha: 1 })
+      .to(vinyl, { xPercent: 0, yPercent: 0, rotation: -40, duration: 0.45, ease: 'power3.inOut' }, 0)
+      .to(info.querySelector('.di__title > span'), { yPercent: -110, duration: 0.4, ease: 'power3.in' }, 0)
+      .to(info.querySelectorAll('.reveal:not(.di__title) > *'), { autoAlpha: 0, y: -8, stagger: 0.012, duration: 0.3, ease: 'power2.in' }, 0)
+      .to(kanji.children, { yPercent: -110, autoAlpha: 0, stagger: 0.04, duration: 0.4, ease: 'power3.in' }, 0)
+      .to(bg, { backgroundColor: records[next].color, duration: 0.9, ease: 'power2.inOut' }, 0.1)
+      .to(obj, { xPercent: -24 * dir, autoAlpha: 0, duration: 0.4, ease: 'power3.in' }, 0.4)
   }
 
   el.querySelector('.dn--close').addEventListener('click', close)

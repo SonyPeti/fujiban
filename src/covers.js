@@ -8,7 +8,7 @@ const rng = (seed) => () => {
   return ((t ^ (t >>> 14)) >>> 0) / 4294967296
 }
 
-const SANS = `font-family="Inter Tight, sans-serif"`
+const SANS = `font-family="IBM Plex Mono, monospace"` // cover labels share the site mono
 const SERIF = `font-family="Shippori Mincho B1, serif"`
 
 // Shared typographic frame: label top-left, edition top-right, title bottom.

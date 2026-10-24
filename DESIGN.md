@@ -21,7 +21,8 @@ Brandon Yasin's structure (loader, a clean grid, tiny type) combined with Corn R
 | `--yoru` | `#0B0F1C` | night sky (hero only) |
 
 ## Type
-- **Latin UI:** Inter Tight, 400/500. Tiny uppercase labels (11px, +0.04em tracking), like Brandon's.
+- **Labels, numbers, tracklists:** IBM Plex Mono 400/500, 11px uppercase, +0.02em, like a pressing sheet or record catalog. Cover and vinyl-label small type use it too.
+- **Big Latin titles and copy:** Inter Tight 400, tight tracking.
 - **Display Japanese:** Shippori Mincho B1, 800. Huge kanji, often set vertically (`writing-mode: vertical-rl`).
 - **Numbers:** tabular (`font-variant-numeric: tabular-nums`).
 - Never more than 2 sizes on one screen, apart from the display moment.

@@ -28,7 +28,19 @@ tick(); setInterval(tick, 10000)
 const SVGNS = 'http://www.w3.org/2000/svg'
 const mk = (tag, attrs) => { const el = document.createElementNS(SVGNS, tag); for (const k in attrs) el.setAttribute(k, attrs[k]); return el }
 let seed = 11; const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
-for (let i = 0; i < 140; i++) $('#stars').append(mk('circle', { cx: rand() * 1600, cy: rand() * 620, r: rand() * 1.4 + 0.3, fill: '#fff', opacity: rand() * 0.7 + 0.2 }))
+// Stars also fill the sky above the frame, which portrait screens show
+for (let i = 0; i < 300; i++) $('#stars').append(mk('circle', { cx: rand() * 1600, cy: -900 + rand() * 1520, r: rand() * 1.4 + 0.3, fill: '#fff', opacity: rand() * 0.7 + 0.2 }))
+
+// Framing: landscape crops the wide scene to fill the screen (slice). Portrait
+// shows the middle 1000 units whole at the bottom (meet) with open sky above,
+// so Fuji and the record stay intact on a phone.
+const scene = $('.scene')
+const frame = () => {
+  const portrait = innerWidth / innerHeight < 0.8
+  scene.setAttribute('viewBox', portrait ? '300 0 1000 1000' : '0 0 1600 1000')
+  scene.setAttribute('preserveAspectRatio', portrait ? 'xMidYMax meet' : 'xMidYMax slice')
+}
+frame(); addEventListener('resize', frame)
 for (let r = 120; r < 296; r += 3.2) $('#grooves').append(mk('circle', { cx: 800, cy: 0, r, fill: 'none', stroke: r % 32 < 3.2 ? '#050506' : '#1b1b1e', 'stroke-width': 1 }))
 
 // ---------- Photo layers: use generated images if they exist ----------

@@ -6,7 +6,7 @@
   <title>FUJIBAN 富士盤 — Seven Records</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Shippori+Mincho+B1:wght@800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500&family=Shippori+Mincho+B1:wght@800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body class="is-loading">
@@ -30,8 +30,8 @@
       <div class="hero__stage">
         <svg class="scene" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
           <defs>
-            <linearGradient id="skyNight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#04060D"/><stop offset="1" stop-color="#1A2342"/></linearGradient>
-            <linearGradient id="skyDawn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9B8C9"/><stop offset=".65" stop-color="#E9D3C3"/><stop offset="1" stop-color="#ECE8DF"/></linearGradient>
+            <linearGradient id="skyNight" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1000"><stop offset="0" stop-color="#04060D"/><stop offset="1" stop-color="#1A2342"/></linearGradient>
+            <linearGradient id="skyDawn" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1000"><stop offset="0" stop-color="#A9B8C9"/><stop offset=".65" stop-color="#E9D3C3"/><stop offset="1" stop-color="#ECE8DF"/></linearGradient>
             <radialGradient id="glow"><stop offset="0" stop-color="#FF6A3D" stop-opacity=".55"/><stop offset="1" stop-color="#FF6A3D" stop-opacity="0"/></radialGradient>
             <radialGradient id="fogG"><stop offset="0" stop-color="#F4F1EA" stop-opacity=".9"/><stop offset="1" stop-color="#F4F1EA" stop-opacity="0"/></radialGradient>
             <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
@@ -40,8 +40,9 @@
             <path id="labelPath" d="M800 0 m-78 0 a78 78 0 1 1 156 0 a78 78 0 1 1 -156 0" />
           </defs>
 
-          <rect width="1600" height="1000" fill="url(#skyNight)"/>
-          <rect class="sky-dawn" width="1600" height="1000" fill="url(#skyDawn)" opacity="0"/>
+          <!-- sky runs far above the frame so portrait screens (meet) still get sky -->
+          <rect x="-400" y="-1600" width="2400" height="2600" fill="url(#skyNight)"/>
+          <rect class="sky-dawn" x="-400" y="-1600" width="2400" height="2600" fill="url(#skyDawn)" opacity="0"/>
           <g class="stars" id="stars"></g>
 
           <!-- The sun that is a record -->
@@ -57,7 +58,7 @@
             </g>
             <circle class="sun__disc" cx="800" cy="0" r="110" fill="#D2231C"/>
             <g class="vinyl__label">
-              <text font-family="Inter Tight" font-size="13" font-weight="500" letter-spacing="3" fill="#ECE8DF"><textPath href="#labelPath">FUJIBAN 富士盤 · SEVEN RECORDS · 300 COPIES · TOKYO ·</textPath></text>
+              <text font-family="IBM Plex Mono" font-size="13" font-weight="500" letter-spacing="2" fill="#ECE8DF"><textPath href="#labelPath">FUJIBAN 富士盤 · SEVEN RECORDS · 300 COPIES · TOKYO ·</textPath></text>
               <circle cx="800" cy="0" r="6" fill="#ECE8DF"/>
             </g>
           </g>
@@ -92,6 +93,7 @@
         <span>THE SEVEN</span>
         <span class="tnum"><b id="crateIdx">01</b> / 07</span>
         <span class="crate__hint">SCROLL OR DRAG · HOVER TO PULL THE RECORD</span>
+        <span class="crate__hint--touch">SWIPE · TAP TWICE</span>
       </div>
       <div class="crate__track" id="track"></div>
     </section>

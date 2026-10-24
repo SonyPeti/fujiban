@@ -30,7 +30,7 @@ export function initCrate(lenis, onSelect) {
 
   const measure = () => {
     size = cards[0].offsetWidth
-    slot = size * 1.86 // vinyl slides out ~0.54 of a sleeve; keep clear air before the next one
+    slot = size * (innerWidth < 700 ? 1.22 : 1.86) // desktop vinyl slides out sideways ~0.54 of a sleeve; phone slides up
     total = slot * cards.length
   }
   measure()
