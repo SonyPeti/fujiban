@@ -8,6 +8,7 @@ import { vinyls, vinylHTML } from './vinyls.js'
 export function initDetail(lenis) {
   const el = document.querySelector('#detail')
   const bg = el.querySelector('.detail__bg')
+  const obj = el.querySelector('.detail__obj') // sleeve + vinyl fly as one
   const sleeve = el.querySelector('.detail__sleeve')
   const vinyl = el.querySelector('.detail__vinyl')
   const info = el.querySelector('.detail__info')
@@ -44,7 +45,8 @@ export function initDetail(lenis) {
 
   // Reveal everything except the sleeve flight; shared by open and prev/next
   const intro = (t, at) => {
-    t.fromTo(vinyl, { xPercent: 0, rotation: -40 }, { xPercent: 56, rotation: 0, duration: 1.3, ease: 'expo.out' }, at)
+    t.set(vinyl, { autoAlpha: 1 }, at)
+      .fromTo(vinyl, { xPercent: 0, rotation: -40 }, { xPercent: 56, rotation: 0, duration: 1.3, ease: 'expo.out' }, at)
       .add(() => el.classList.add('is-spinning'), at + 0.3)
       .fromTo(kanji.children, { yPercent: 110, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, stagger: 0.08, duration: 1, ease: 'expo.out' }, at + 0.1)
       .fromTo(info.querySelectorAll('.reveal > *'), { yPercent: 110 }, { yPercent: 0, stagger: 0.035, duration: 0.9, ease: 'expo.out' }, at + 0.15)
@@ -64,7 +66,7 @@ export function initDetail(lenis) {
 
     const cardSleeve = card?.querySelector('.card__sleeve')
     const from = cardSleeve?.getBoundingClientRect()
-    const to = sleeve.getBoundingClientRect()
+    const to = obj.getBoundingClientRect()
     const cx = from ? from.left + from.width / 2 : innerWidth / 2
     const cy = from ? from.top + from.height / 2 : innerHeight / 2
     openedFrom = from ? { card, cardSleeve } : null
@@ -73,12 +75,13 @@ export function initDetail(lenis) {
     tl.fromTo(bg, { clipPath: `circle(0px at ${cx}px ${cy}px)` }, { clipPath: `circle(${Math.hypot(innerWidth, innerHeight)}px at ${cx}px ${cy}px)`, duration: 1.1, ease: 'expo.inOut' }, 0)
     if (from) {
       tl.set(cardSleeve, { autoAlpha: 0 }, 0)
-        .fromTo(sleeve, { x: from.left - to.left, y: from.top - to.top, scale: from.width / to.width, transformOrigin: '0 0' },
+        .set(vinyl, { autoAlpha: 0 }, 0) // tucked inside until the sleeve lands
+        .fromTo(obj, { x: from.left - to.left, y: from.top - to.top, scale: from.width / to.width, transformOrigin: '0 0' },
           { x: 0, y: 0, scale: 1, duration: 1.2, ease: 'expo.inOut' }, 0)
     } else {
       tl.fromTo(sleeve, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 1, ease: 'expo.out' }, 0.3)
     }
-    intro(tl, 0.75)
+    intro(tl, from ? 1.05 : 0.75) // vinyl comes out as the sleeve settles
     tl.add(() => gsap.set(bg, { clipPath: 'none' })) // survive window resizes while open; reverse re-renders the circle
     if (reduced) tl.progress(1)
   }
@@ -91,14 +94,14 @@ export function initDetail(lenis) {
       el.hidden = true
       document.body.classList.remove('detail-open')
       if (openedFrom) gsap.set(openedFrom.cardSleeve, { autoAlpha: 1 })
-      gsap.set([sleeve, vinyl, bg], { clearProps: 'all' })
+      gsap.set([obj, sleeve, vinyl, bg], { clearProps: 'all' })
       lenis.start()
       history.replaceState(null, '', location.pathname)
       lastFocus?.focus?.({ preventScroll: true })
       current = -1; busy = false
     }
     // Same record we flew in from: rewind the flight. Otherwise just fade out.
-    if (openedFrom && tl) tl.eventCallback('onReverseComplete', done).timeScale(1.6).reverse()
+    if (openedFrom && tl) tl.eventCallback('onReverseComplete', done).timeScale(2.4).reverse()
     else gsap.to(el, { autoAlpha: 0, duration: 0.5, ease: 'power2.in', onComplete: () => { gsap.set(el, { clearProps: 'all' }); done() } })
   }
 
