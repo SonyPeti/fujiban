@@ -12,7 +12,7 @@ export function initCrate(lenis) {
   track.innerHTML = records.map((r, i) => `
     <article class="card" data-i="${i}" tabindex="0" aria-label="${r.no} ${r.romaji} by ${r.artist}">
       <div class="card__obj">
-        <div class="card__vinyl">${vinylHTML(i, coverSVG(i))}</div>
+        <div class="card__vinyl">${vinylHTML(i, r)}</div>
         <div class="card__sleeve">${coverSVG(i)}</div>
       </div>
       <div class="card__meta">

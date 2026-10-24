@@ -77,8 +77,8 @@ function runLoader() {
 
 // ---------- Hero: scroll-scrubbed dawn ----------
 function heroScene() {
-  gsap.set(['.vinyl', '.vinyl__label'], { scale: 0.37, svgOrigin: '800 0' })
-  gsap.set('.vinyl__label', { autoAlpha: 0 })
+  gsap.set(['#hero .vinyl', '#hero .vinyl__label'], { scale: 0.37, svgOrigin: '800 0' })
+  gsap.set('#hero .vinyl__label', { autoAlpha: 0 })
 
   const tl = gsap.timeline({
     defaults: { ease: 'none' },
@@ -97,9 +97,9 @@ function heroScene() {
     .to('.fog--r', { x: 420, opacity: 0.5, duration: 0.6 }, 0)
     // .45 → .8 : the sun is a record — the disc spreads out behind it
     .to('.sun__glow', { opacity: 0, duration: 0.25 }, 0.45)
-    .to('.vinyl', { scale: 1, duration: 0.35, ease: 'power2.inOut' }, 0.45)
-    .to('.vinyl__label', { autoAlpha: 1, scale: 1, duration: 0.2 }, 0.6)
-    .to('.vinyl__spin, .vinyl__label', { rotation: 540, svgOrigin: '800 0', duration: 0.55 }, 0.45)
+    .to('#hero .vinyl', { scale: 1, duration: 0.35, ease: 'power2.inOut' }, 0.45)
+    .to('#hero .vinyl__label', { autoAlpha: 1, scale: 1, duration: 0.2 }, 0.6)
+    .to('#hero .vinyl__spin, #hero .vinyl__label', { rotation: 540, svgOrigin: '800 0', duration: 0.55 }, 0.45)
     // .7 → 1 : copy reveals
     .fromTo('.mask span', { yPercent: 110 }, { yPercent: 0, stagger: 0.05, duration: 0.2, ease: 'power3.out' }, 0.72)
     .to('#bar', { scaleX: 1, duration: 1 }, 0)

@@ -98,8 +98,17 @@ html.lenis, html.lenis body { height: auto; }
   -webkit-mask: radial-gradient(circle, transparent 0 36%, #000 36.5% 47%, transparent 47.3% 47.8%, #000 48.1% 97.5%, transparent 98%);
           mask: radial-gradient(circle, transparent 0 36%, #000 36.5% 47%, transparent 47.3% 47.8%, #000 48.1% 97.5%, transparent 98%); }
 .is-light .vinyl__grooves { background: repeating-radial-gradient(circle, rgba(0,0,0,.08) 0 1px, rgba(255,255,255,.25) 1px 2px, transparent 2px 3.6px); }
-.vinyl__label { position: absolute; inset: 32.5%; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
-.vinyl__label .cover-svg { transform: scale(1.02); }
+/* Cream paper label, like a real pressing */
+.vinyl__label { position: absolute; inset: 32.5%; border-radius: 50%; overflow: hidden; container-type: inline-size;
+  text-align: center; color: var(--sumi);
+  background: radial-gradient(circle, transparent 0 60%, rgba(0,0,0,.04) 61% 62%, transparent 63%), #EDE6D6;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08), inset 0 0 0 5cqw #EDE6D6, inset 0 0 0 calc(5cqw + 1px) var(--hinomaru); }
+/* Brand + kanji sit above the spindle hole, meta below it */
+.vinyl__label > span { position: absolute; left: 0; right: 0; }
+.vl__brand, .vl__meta { font: 500 5.6cqw/1.25 var(--sans); letter-spacing: .08em; }
+.vl__brand { top: 17%; }
+.vl__kanji { top: 26%; font: 800 16cqw/1 var(--serif); }
+.vl__meta { top: 60%; color: #6d6a63; }
 .vinyl__hole { position: absolute; left: 50%; top: 50%; width: 2.6%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; background: var(--washi); box-shadow: inset 0 1px 2px rgba(0,0,0,.5); }
 .vinyl__sheen { position: absolute; inset: 0; border-radius: 50%; mix-blend-mode: screen; pointer-events: none;
   background: conic-gradient(from 20deg, transparent 0 6%, rgba(255,255,255,.28) 11%, transparent 17% 50%, rgba(255,255,255,.22) 61%, transparent 67%);
