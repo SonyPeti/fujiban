@@ -55,7 +55,9 @@ html.lenis, html.lenis body { height: auto; }
 .scene { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .has-photos .fog { opacity: .3; } /* photo mist does the heavy lifting */
 .hero__kanji { position: absolute; right: var(--m); top: 50%; translate: 0 -50%; writing-mode: vertical-rl; font: 800 clamp(72px, 13vh, 150px)/1 var(--serif); letter-spacing: .08em; color: var(--washi); mix-blend-mode: difference; }
-.hero__copy { position: absolute; left: var(--m); top: 38%; /* sits in the pale sky, clear of the dark treeline */ font: 400 clamp(26px, 3.4vw, 48px)/1.05 var(--sans); letter-spacing: -.02em; text-transform: none; color: var(--sumi); }
+.hero__copy { position: absolute; z-index: 2; left: var(--m); top: 44%; /* pale sky, clear of the treeline */
+  font: 500 clamp(22px, 2vw, 38px)/1.14 var(--serif); letter-spacing: -.01em; text-transform: none;
+  color: #3E4558; } /* soft dusk indigo, sized so the longest line ends before the record (~13em) */
 .mask { overflow: hidden; padding-bottom: .14em; margin-bottom: -.14em; } /* room for descenders (p, g, y) inside the reveal mask */
 .mask span { display: block; }
 .hero__progress { position: absolute; left: var(--m); right: var(--m); bottom: var(--m); display: flex; align-items: center; gap: 12px; color: var(--washi); mix-blend-mode: difference; }
@@ -137,8 +139,8 @@ body.detail-open .ui { visibility: hidden; }
 .di__eyebrow { display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; color: var(--muted); }
 .di__eyebrow span { white-space: nowrap; }
 .di__eyebrow b { font-weight: 500; color: var(--ink); }
-.di__title { margin: 18px 0 6px; font: 400 clamp(40px, 5.6vw, 96px)/.88 var(--sans); letter-spacing: -.045em; text-transform: none; }
-.di__sub { font: 400 clamp(15px, 1.25vw, 20px)/1.3 var(--sans); letter-spacing: -.01em; text-transform: none; color: var(--muted); }
+.di__title { margin: 18px 0 6px; font: 500 clamp(40px, 5.4vw, 92px)/.95 var(--serif); letter-spacing: -.02em; text-transform: none; }
+.di__sub { font: 500 clamp(15px, 1.25vw, 20px)/1.3 var(--serif); letter-spacing: 0; text-transform: none; color: var(--muted); }
 .di__tracks { margin: 28px 0; border-top: 1px solid var(--line); }
 .di__tracks li { display: grid; grid-template-columns: 3ch 1fr auto; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
 .di__tracks li span:first-child, .di__tracks li span:last-child { color: var(--muted); }

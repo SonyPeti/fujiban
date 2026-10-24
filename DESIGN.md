@@ -22,7 +22,7 @@ Brandon Yasin's structure (loader, a clean grid, tiny type) combined with Corn R
 
 ## Type
 - **Labels, numbers, tracklists:** IBM Plex Mono 400/500, 11px uppercase, +0.02em, like a pressing sheet or record catalog. Cover and vinyl-label small type use it too.
-- **Big Latin titles and copy:** Inter Tight 400, tight tracking.
+- **Big Latin titles and copy:** Shippori Mincho B1 500, the same family as the kanji, so the big words and the kanji share one voice. (Inter Tight stays only for the loader counter.)
 - **Display Japanese:** Shippori Mincho B1, 800. Huge kanji, often set vertically (`writing-mode: vertical-rl`).
 - **Numbers:** tabular (`font-variant-numeric: tabular-nums`).
 - Never more than 2 sizes on one screen, apart from the display moment.
