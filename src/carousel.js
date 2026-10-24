@@ -39,9 +39,16 @@ export function initCrate(lenis, onSelect) {
 
   const mod = (n, m) => ((n % m) + m) % m
 
+  // Only do work while the crate is on screen and still moving
+  let visible = false, settled = false
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; settled = false }).observe(track)
+  addEventListener('resize', () => (settled = false))
+
   gsap.ticker.add(() => {
+    if (!visible || (settled && Math.abs(target - current) < 0.05)) return
     current += (target - current) * 0.085
     const v = target - current
+    settled = Math.abs(v) < 0.05
     const skew = gsap.utils.clamp(-6, 6, v * -0.012)
     let best = Infinity, bestI = 0
     cards.forEach((c, i) => {

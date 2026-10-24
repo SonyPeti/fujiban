@@ -7,6 +7,7 @@ import { initCrate } from './carousel.js'
 import { initDetail } from './detail.js'
 
 gsap.registerPlugin(ScrollTrigger)
+ScrollTrigger.config({ ignoreMobileResize: true }) // phone address bar showing/hiding shouldn't re-measure the pin
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
 const $ = (s) => document.querySelector(s)
 
@@ -44,21 +45,20 @@ frame(); addEventListener('resize', frame)
 for (let r = 120; r < 296; r += 3.2) $('#grooves').append(mk('circle', { cx: 800, cy: 0, r, fill: 'none', stroke: r % 32 < 3.2 ? '#050506' : '#1b1b1e', 'stroke-width': 1 }))
 
 // ---------- Photo layers: use generated images if they exist ----------
-const NIGHT = 'brightness(0.22) saturate(0.4) hue-rotate(20deg)'
-const DAWN = 'brightness(1) saturate(1) hue-rotate(0deg)'
-const photos = [...document.querySelectorAll('.photo')].map((el) => new Promise((done) => {
-  const img = new Image()
-  img.onload = () => {
+// Each photo gets a pre-darkened night twin stacked on top (scripts/scene-images.mjs);
+// dawn = fading the twins out. Opacity is cheap; a per-frame CSS filter is not.
+const load = (src) => new Promise((ok, fail) => { const i = new Image(); i.onload = ok; i.onerror = fail; i.src = src })
+const photos = [...document.querySelectorAll('.photo')].map((el) =>
+  Promise.all([load(el.dataset.src), load(el.dataset.night)]).then(() => {
     el.setAttribute('href', el.dataset.src)
     el.style.display = ''
-    el.style.filter = NIGHT
+    const night = el.cloneNode()
+    night.setAttribute('href', el.dataset.night)
+    night.classList.replace('photo', 'photo-night')
+    el.after(night)
     if (el.dataset.replaces) document.querySelectorAll(el.dataset.replaces).forEach((v) => (v.style.display = 'none'))
     document.documentElement.classList.add('has-photos')
-    done()
-  }
-  img.onerror = done
-  img.src = el.dataset.src
-}))
+  }).catch(() => {}))
 
 // ---------- Covers: loader flick ----------
 const flick = $('#flick')
@@ -86,7 +86,7 @@ function runLoader() {
   tl.to('.hero__stage', { clipPath: 'inset(0px 0px)', duration: reduced ? 0 : 1.4, ease: 'expo.inOut' }, '<0.1')
   tl.from('.scene', { scale: 1.25, duration: 1.8, ease: 'expo.out' }, '<0.2')
   tl.from('.hero__kanji', { autoAlpha: 0, yPercent: 8, duration: 1.2, ease: 'expo.out' }, '<0.6')
-  tl.add(() => { document.body.classList.remove('is-loading'); $('.loader').remove(); lenis.start(); ScrollTrigger.refresh(); detail.openFromHash() })
+  tl.add(() => { gsap.set('.hero__stage', { clipPath: 'none' }); document.body.classList.remove('is-loading'); $('.loader').remove(); lenis.start(); ScrollTrigger.refresh(); detail.openFromHash() })
 }
 
 // ---------- Hero: scroll-scrubbed dawn ----------
@@ -105,8 +105,9 @@ function heroScene() {
     .to('.fuji', { attr: { fill: '#5E6C86' }, duration: 0.5 }, 0)
     .to('.fuji-snow', { attr: { fill: '#F4F1EA' }, duration: 0.5 }, 0)
     .to('.ridge', { attr: { fill: '#2B3348' }, duration: 0.5 }, 0)
-    .fromTo('.photo', { filter: NIGHT }, { filter: DAWN, duration: 0.5 }, 0)
-    .to('.photo--mist', { x: 260, opacity: 0.6, duration: 0.6 }, 0)
+    .to('.photo-night', { opacity: 0, duration: 0.5 }, 0)
+    .to('.photo--mist', { x: 260, duration: 0.6 }, 0) // both mist layers drift together
+    .to('.photo.photo--mist', { opacity: 0.6, duration: 0.6 }, 0) // only the dawn mist thins
     .to('.fog--l', { x: -420, opacity: 0.5, duration: 0.6 }, 0)
     .to('.fog--r', { x: 420, opacity: 0.5, duration: 0.6 }, 0)
     // .45 → .8 : the sun is a record — the disc spreads out behind it

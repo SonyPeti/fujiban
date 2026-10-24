@@ -67,10 +67,10 @@
           <path class="fuji" d="M120 1000 C430 860 610 650 712 528 L756 516 L788 530 L820 512 L886 526 C990 650 1170 860 1480 1000 Z" fill="#0F1428"/>
           <path class="fuji-snow" d="M712 528 L756 516 L788 530 L820 512 L886 526 C904 548 922 572 940 598 L918 588 L904 618 L880 596 L860 640 L840 604 L816 650 L796 608 L776 638 L756 600 L736 626 L720 596 L690 612 C698 580 705 552 712 528 Z" fill="#3A4466"/>
           <!-- Photo layers (ChatGPT, see PROMPTS.md) replace the vectors when present -->
-          <image class="photo" data-src="/scene/fuji.png" data-replaces=".fuji, .fuji-snow" x="-200" y="17" width="2000" height="1333" preserveAspectRatio="xMidYMax meet" style="display:none"/>
+          <image class="photo" data-src="/scene/fuji.webp" data-night="/scene/fuji-night.webp" data-replaces=".fuji, .fuji-snow" x="-200" y="17" width="2000" height="1333" preserveAspectRatio="xMidYMax meet" style="display:none"/>
           <path class="ridge" d="M0 1000 L0 900 C200 870 380 905 560 930 C760 955 980 920 1180 895 C1360 875 1500 895 1600 905 L1600 1000 Z" fill="#070A14"/>
-          <image class="photo" data-src="/scene/foreground.png" data-replaces=".ridge" x="0" y="70" width="1600" height="1067" preserveAspectRatio="xMidYMax meet" style="display:none"/>
-          <image class="photo photo--mist" data-src="/scene/mist.png" mask="url(#mistMask)" x="-500" y="160" width="2600" height="1067" preserveAspectRatio="none" style="display:none"/>
+          <image class="photo" data-src="/scene/foreground.webp" data-night="/scene/foreground-night.webp" data-replaces=".ridge" x="0" y="70" width="1600" height="1067" preserveAspectRatio="xMidYMax meet" style="display:none"/>
+          <image class="photo photo--mist" data-src="/scene/mist.webp" data-night="/scene/mist-night.webp" mask="url(#mistMask)" x="-500" y="160" width="2600" height="1067" preserveAspectRatio="none" style="display:none"/>
 
           <!-- Fog -->
           <g class="fog fog--l"><ellipse cx="520" cy="830" rx="640" ry="110" fill="url(#fogG)"/><ellipse cx="300" cy="700" rx="420" ry="70" fill="url(#fogG)" opacity=".7"/></g>
@@ -100,7 +100,7 @@
   </main>
 
   <!-- Record page (one overlay, filled per record) -->
-  <div class="detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="detailTitle" hidden>
+  <div class="detail" id="detail" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="detailTitle" hidden>
     <div class="detail__bg"></div>
     <div class="detail__obj"><div class="detail__vinyl"></div><div class="detail__sleeve"></div></div>
     <div class="detail__info"></div>
